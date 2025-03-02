@@ -1,0 +1,33 @@
+name: Deploy React UI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚀 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔑 Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: 🚀 Deploy and Build on Server
+        run: |
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd /home/jakhongir/graduation_projectUI
+          git pull origin main
+          docker stop grad2-ui || true
+          docker rm grad2-ui || true
+          docker build -t grad2-ui .
+          docker run -d -p 3000:80 --name grad2-ui grad2-ui
+          EOF
+
