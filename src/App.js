@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="app-container">
       <nav className="navbar">
-        <Link to="/" className="nav-logo">Push Notification App</Link>
+        <Link to="/" className="nav-logo">Push Notification App!!!</Link>
         <div className="nav-links">
           {user ? (
             <div className="user-info">
