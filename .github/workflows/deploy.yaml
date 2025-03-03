@@ -24,6 +24,7 @@ jobs:
 
       - name: Deploy and Build on Server
         run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}"
           ssh root@35.225.138.10 << 'EOF'
           cd /home/jakhongir/graduation_projectUI
           git pull origin main
